@@ -4,3 +4,5 @@ const quizQuestions = [
   {question: "When was the first cat video recorded?", answer: 1894},
   {question: "What is the term for a group of kittens?", answer: "A litter"}
 ]
+
+module.exports = { quizQuestions } //need to use this because package.json doesnt have type: module which would allow for export const quizQuestions and then import {quizQuestions} from filepath

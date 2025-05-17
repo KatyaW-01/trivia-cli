@@ -1,5 +1,6 @@
 //main game logic/functions goes here 
-import { select, input } from "@inquirer/prompts";
+const { select, input } = require('@inquirer/prompts');
+const { quizQuestions } = require('./questions')
 
 async function showMainMenu() {
   const action = await select({
@@ -21,6 +22,7 @@ async function showMainMenu() {
       showMainMenu();
       break;
     case "quit":
-      console.log("Goodbye!")
+      console.log("Goodbye!");
+      process.exit(0);
   }
 }
