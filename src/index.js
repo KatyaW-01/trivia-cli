@@ -64,7 +64,11 @@ function displayStats(quizStats) {
   console.log(chalk.blue("Quiz Score"));
   console.log(chalk.green(`Number Correct: ${quizStats.stats.Correct}`))
   console.log(chalk.red(`Number Incorrect: ${quizStats.stats.Incorrect}`))
-  console.log(chalk.white(`Missed Questions: ${quizStats.missed}`))
+  let missedQuestions = quizStats.missed
+  console.log(chalk.white("Missed Questions:"))
+  for(const object of missedQuestions) {
+    console.log(chalk.white(`Question: ${object.question}, Correct answer: ${object.answer} `))
+  }
 }
 
 function resetStats(quizStats,userAnswers) {
