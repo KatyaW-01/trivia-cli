@@ -34,3 +34,17 @@ async function startQuiz(quizQuestions, userAnswers) {
     userAnswers.push(answer) //pushes the users input to an empty array
   }
 }
+
+function updateStats(userAnswers,quizQuestions,quizStats) {
+  for (let i = 0; i < quizQuestions.length; i++) {
+    const quizAnswer = String(quizQuestions[i].answer).trim().toLowerCase();
+    const userAnswer =  String(userAnswers[i]).trim().toLowerCase();
+
+    if(quizAnswer === userAnswer) {
+      quizStats.stats.Correct += 1;
+    } else {
+      quizStats.stats.Incorrect +=1
+      quizStats.missed.push(quizQuestions[i])
+    }
+  }
+}
