@@ -1,8 +1,9 @@
 //main game logic/functions goes here 
-const chalk = require('chalk');
+const chalk = require("chalk");
 const { select, input } = require('@inquirer/prompts');
 //const { quizQuestions } = require('./questions')
 //const { quizStats, userAnswers } = require('./stats')
+const { quizStats } = require('./stats')
 
 async function showMainMenu(quizQuestions,userAnswers,quizStats) {
   const action = await select({
@@ -42,6 +43,7 @@ async function startQuiz(quizQuestions, userAnswers) {
   }
 
   updateStats(userAnswers,quizQuestions,quizStats)
+  showMainMenu(quizQuestions,userAnswers,quizStats)
 }
 
 function updateStats(userAnswers,quizQuestions,quizStats) {
@@ -70,3 +72,5 @@ function resetStats(quizStats,userAnswers) {
   quizStats.missed = []
   userAnswers.length = 0;
 }
+
+module.exports = { showMainMenu };
