@@ -1,14 +1,16 @@
 //main game logic/functions goes here 
+const chalk = require('chalk');
 const { select, input } = require('@inquirer/prompts');
-const { quizQuestions } = require('./questions')
-const { quizStats, userAnswers } = require('./stats')
+//const { quizQuestions } = require('./questions')
+//const { quizStats, userAnswers } = require('./stats')
 
-async function showMainMenu() {
+async function showMainMenu(quizQuestions,userAnswers,quizStats) {
   const action = await select({
     message: "Main Menu",
     choices: [
       { name: "Start Quiz", value: "start" },
       { name: "Check Scores", value: "stats"},
+      { name: "Reset Scores", value: "reset"},
       { name: "Quit", value: "quit"},
     ]
   });
@@ -18,9 +20,14 @@ async function showMainMenu() {
       await startQuiz(quizQuestions,userAnswers);
       break;
     case "stats":
-      showStats();
+      displayStats(quizStats);
       await select({ message: "Press Enter to go back", choices: [{ name: "Back", value: "back" }] });
-      showMainMenu();
+      showMainMenu(quizQuestions,userAnswers,quizStats);
+      break;
+    case "reset":
+      resetStats(quizStats,userAnswers);
+      console.log(chalk.magenta("Stats have been reset."));
+      await showMainMenu(quizQuestions,userAnswers,quizStats);
       break;
     case "quit":
       console.log("Goodbye!");
@@ -33,6 +40,8 @@ async function startQuiz(quizQuestions, userAnswers) {
     const answer = await input({ message: object.question }); //displays question
     userAnswers.push(answer) //pushes the users input to an empty array
   }
+
+  updateStats(userAnswers,quizQuestions,quizStats)
 }
 
 function updateStats(userAnswers,quizQuestions,quizStats) {
@@ -47,4 +56,17 @@ function updateStats(userAnswers,quizQuestions,quizStats) {
       quizStats.missed.push(quizQuestions[i])
     }
   }
+}
+
+function displayStats(quizStats) {
+  console.log(chalk.blue("Quiz Score"));
+  console.log(chalk.green(`Number Correct: ${quizStats.stats.Correct}`))
+  console.log(chalk.red(`Number Incorrect: ${quizStats.stats.Incorrect}`))
+  console.log(chalk.white(`Missed Questions: ${quizStats.missed}`))
+}
+
+function resetStats(quizStats,userAnswers) {
+  quizStats.stats = { Correct: 0, Incorrect: 0 };
+  quizStats.missed = []
+  userAnswers.length = 0;
 }
