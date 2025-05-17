@@ -1,6 +1,7 @@
 //main game logic/functions goes here 
 const { select, input } = require('@inquirer/prompts');
 const { quizQuestions } = require('./questions')
+const { quizStats, userAnswers } = require('./stats')
 
 async function showMainMenu() {
   const action = await select({
@@ -14,7 +15,7 @@ async function showMainMenu() {
 
   switch (action) {
     case "start":
-      await startGame();
+      await startQuiz(quizQuestions,userAnswers);
       break;
     case "stats":
       showStats();
@@ -24,5 +25,12 @@ async function showMainMenu() {
     case "quit":
       console.log("Goodbye!");
       process.exit(0);
+  }
+}
+
+async function startQuiz(quizQuestions, userAnswers) {
+  for (const object of quizQuestions) {
+    const answer = await input({ message: object.question }); //displays question
+    userAnswers.push(answer) //pushes the users input to an empty array
   }
 }

@@ -5,6 +5,6 @@ const quizStats = {
   }
 }
 
-const userAnswers = []
+let userAnswers = []
 
 module.exports = { quizStats, userAnswers}
