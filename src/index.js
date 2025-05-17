@@ -1,8 +1,5 @@
-//main game logic/functions goes here 
 const chalk = require("chalk");
 const { select, input } = require('@inquirer/prompts');
-//const { quizQuestions } = require('./questions')
-//const { quizStats, userAnswers } = require('./stats')
 const { quizStats } = require('./stats')
 
 async function showMainMenu(quizQuestions,userAnswers,quizStats) {
@@ -36,14 +33,22 @@ async function showMainMenu(quizQuestions,userAnswers,quizStats) {
   }
 }
 
-async function startQuiz(quizQuestions, userAnswers) {
-  for (const object of quizQuestions) {
-    const answer = await input({ message: object.question }); //displays question
-    userAnswers.push(answer) //pushes the users input to an empty array
-  }
+let timeUp = false
 
+async function startQuiz(quizQuestions, userAnswers) {
+  timeUp = false
+  const timerId = setTimeLimit(); 
+  for (const object of quizQuestions) {
+    if(timeUp === true) { //if time limit has been reached, stops giving questions
+      break;
+    } else {
+      const answer = await input({ message: object.question }); //displays question
+      userAnswers.push(answer) //pushes the users input to an empty array 
+    }
+  }
+  clearTimeout(timerId) //stops timer if all questions have been answered
   updateStats(userAnswers,quizQuestions,quizStats)
-  showMainMenu(quizQuestions,userAnswers,quizStats)
+  await showMainMenu(quizQuestions,userAnswers,quizStats)
 }
 
 function updateStats(userAnswers,quizQuestions,quizStats) {
@@ -75,6 +80,14 @@ function resetStats(quizStats,userAnswers) {
   quizStats.stats = { Correct: 0, Incorrect: 0 };
   quizStats.missed = []
   userAnswers.length = 0;
+}
+
+function setTimeLimit() { //sets a 5min timer for the quiz
+    return setTimeout(()=>{
+      console.log(chalk.red("You have reached the time limit for this quiz, calculating scores now..."));
+      console.log(chalk.blue("Press Enter to return to main menu"))
+      timeUp = true;
+    },300000);
 }
 
 module.exports = { showMainMenu };
