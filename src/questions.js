@@ -8,4 +8,4 @@ const quizQuestions = [
   {question: "How many cats did Abraham Lincoln have in the White House?", answer: 4}
 ]
 
-module.exports = { quizQuestions } //need to use this because package.json doesnt have type: module which would allow for export const quizQuestions and then import {quizQuestions} from filepath
+module.exports = { quizQuestions } 
